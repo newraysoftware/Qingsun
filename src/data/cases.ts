@@ -1,0 +1,48 @@
+import type { CaseStudy } from '../types'
+
+export const CASE_STUDIES: CaseStudy[] = [
+  {
+    id: 'case1',
+    stageId: 'foundation',
+    direction: '外周血管',
+    title: '股动脉穿刺失败复盘',
+    focus: '穿刺点选择、压迫止血',
+    preOp: '高龄患者，股动脉钙化，凝血功能正常',
+    intraOp: '国产DSA正位透视定位，18G针两次未回血，调整穿刺角度后成功',
+    postOp: '压迫15分钟，无血肿，嘱卧床6小时',
+    dsaPoints: '正位确认股动脉分叉，侧位确认前后壁',
+  },
+  {
+    id: 'case2',
+    stageId: 'advanced',
+    direction: '肝胆介入',
+    title: '巨块型肝癌TACE',
+    focus: '微导管超选、栓塞终点',
+    preOp: 'Child-Pugh A，门静脉无癌栓，AFP升高',
+    intraOp: '国产DSA三维重建明确供血动脉，微导管超选至段支，碘油+明胶海绵栓塞',
+    postOp: '栓塞后综合征处理，1月复查影像',
+    dsaPoints: '动脉期明确供血动脉，栓塞后复查避免误栓',
+  },
+  {
+    id: 'case3',
+    stageId: 'authorization',
+    direction: '门脉高压',
+    title: '肝硬化TIPS术',
+    focus: '门静脉穿刺、支架释放',
+    preOp: '反复消化道出血，MELD评分评估',
+    intraOp: '经颈静脉肝内门体分流，国产DSA引导下穿刺，10mm覆膜支架释放',
+    postOp: '监测肝性脑病、分流道通畅',
+    dsaPoints: 'RPP测量、分流道造影确认通畅',
+  },
+  {
+    id: 'case4',
+    stageId: 'mastery',
+    direction: '罕见病',
+    title: '肺动脉栓塞机械取栓',
+    focus: '高危PE急救、多团队协作',
+    preOp: '血流动力学不稳定，超声证实右心负荷',
+    intraOp: '国产DSA肺动脉造影确诊，抽吸导管取栓，溶栓桥接',
+    postOp: 'ICU监护，抗凝方案个体化',
+    dsaPoints: '肺动脉主干造影，取栓前后对比',
+  },
+]

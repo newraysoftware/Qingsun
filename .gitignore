@@ -1,0 +1,12 @@
+node_modules
+.DS_Store
+*.local
+server/data
+server/.env
+.env
+*.log
+tsconfig.tsbuildinfo
+
+# 本地开发构建（安装包在 packages/ 目录提交）
+dist
+server/dist
