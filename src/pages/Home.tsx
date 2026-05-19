@@ -26,34 +26,37 @@ export function Home() {
   return (
     <>
       <section className="relative overflow-hidden bg-gradient-to-br from-primary-800 via-primary-700 to-teal-800 text-white">
-        <div className="absolute inset-0 opacity-20">
-          <svg className="h-full w-full" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice">
-            <rect x="120" y="80" width="200" height="140" rx="8" fill="none" stroke="currentColor" strokeWidth="2" />
-            <circle cx="220" cy="150" r="40" fill="none" stroke="currentColor" strokeWidth="2" />
-            <path d="M400 100h180v200H400z" fill="none" stroke="currentColor" strokeWidth="2" />
-            <text x="430" y="200" fill="currentColor" fontSize="14" opacity="0.6">
-              国产 DSA
-            </text>
-          </svg>
-        </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28">
-          <p className="mb-2 text-sm font-medium text-primary-200">青笋 · 介入培训平台</p>
-          <h1 className="max-w-3xl text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
-            介入医生系统化自学平台
-            <span className="mt-2 block text-primary-100">
-              从规培到独立主刀，按体系成长，按规划进阶
-            </span>
-          </h1>
-          <p className="mt-4 max-w-2xl text-primary-100/90 md:text-lg">
-            四级培训体系 · 专属规划 · 精准内容 · 虚拟实操，让每一步成长都有迹可循
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link to="/system" className="btn-primary bg-white text-primary-800 hover:bg-primary-50">
-              了解培训体系
-            </Link>
-            <Link to="/plan" className="btn-secondary border-white/30 text-white hover:bg-white/10">
-              制定我的规划
-            </Link>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_75%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
+        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-20 lg:py-24">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-8">
+            <div className="relative z-10">
+              <p className="mb-2 text-sm font-medium text-primary-200">青笋 · 介入培训平台</p>
+              <h1 className="text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
+                介入医生系统化自学平台
+                <span className="mt-2 block text-primary-100">
+                  从规培到独立主刀，按体系成长，按规划进阶
+                </span>
+              </h1>
+              <p className="mt-4 max-w-xl text-primary-100/90 md:text-lg">
+                四级培训体系 · 专属规划 · 精准内容 · 虚拟实操，让每一步成长都有迹可循
+              </p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link to="/system" className="btn-primary bg-white text-primary-800 hover:bg-primary-50">
+                  了解培训体系
+                </Link>
+                <Link to="/plan" className="btn-secondary border-white/30 text-white hover:bg-white/10">
+                  制定我的规划
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative flex items-end justify-center lg:justify-end">
+              <img
+                src="/images/hero-dsa-carm.png?v=2"
+                alt="国产 DSA C臂与影像系统"
+                className="w-full max-w-xl object-contain drop-shadow-2xl max-h-[240px] sm:max-h-[300px] lg:max-h-[380px]"
+              />
+            </div>
           </div>
         </div>
       </section>
