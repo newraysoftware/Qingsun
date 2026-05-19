@@ -8,5 +8,5 @@ server/.env
 tsconfig.tsbuildinfo
 
 # 本地开发构建（安装包在 packages/ 目录提交）
-dist
-server/dist
+/dist
+/server/dist
