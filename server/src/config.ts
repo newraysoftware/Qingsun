@@ -5,4 +5,5 @@ export const config = {
   jwtSecret: process.env.JWT_SECRET || 'dev-only-change-in-production',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
   corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  maxJsonBody: '2mb',
 }

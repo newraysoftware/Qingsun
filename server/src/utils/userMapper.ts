@@ -13,6 +13,7 @@ export function mapUser(row: DbUser): PublicUser {
     id: row.id,
     email: row.email,
     name: row.name,
+    role: row.role === 'admin' ? 'admin' : 'user',
     stageId: row.stage_id as TrainingStageId,
     yearsOfPractice: row.years_of_practice,
     planProgress: row.plan_progress,

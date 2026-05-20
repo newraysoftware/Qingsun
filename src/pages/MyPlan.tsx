@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AlertCircle, CheckCircle2, Link2 } from 'lucide-react'
 import { useApp } from '../context/AppContext'
+import { useLearningProgress } from '../context/LearningProgressContext'
+import { ContentProgressBar } from '../components/ContentProgressBar'
 import { STAGE_LABEL } from '../data/trainingSystem'
 import type { TrainingStageId } from '../types'
 import { CONTENT_TYPE_LABEL } from '../data/content'
@@ -10,6 +12,7 @@ export function MyPlan() {
   const [params] = useSearchParams()
   const stageParam = params.get('stage') as TrainingStageId | null
   const { user, tasks, completeTask, generatePlanFromAssessment } = useApp()
+  const { ready, getProgress } = useLearningProgress()
   const [showAssessment, setShowAssessment] = useState(!user.assessmentDone)
   const [years, setYears] = useState(1)
   const [weakInput, setWeakInput] = useState('国产DSA操作,影像读片')
@@ -105,6 +108,12 @@ export function MyPlan() {
                   <p className="text-xs text-slate-500">
                     第{task.week}周 · 截止 {task.dueDate} · {CONTENT_TYPE_LABEL[task.type]}
                   </p>
+                  {ready && (
+                    <ContentProgressBar
+                      progress={getProgress(task.contentId)}
+                      className="mt-2 max-w-xs"
+                    />
+                  )}
                 </div>
               </div>
               <div className="flex gap-2">
@@ -114,10 +123,13 @@ export function MyPlan() {
                   </button>
                 )}
                 <Link
-                  to={`/content?id=${task.contentId}`}
+                  to={`/content?id=${task.contentId}&learn=1`}
                   className="btn-primary flex items-center gap-1 text-xs"
                 >
-                  <Link2 className="h-3 w-3" /> 学习内容
+                  <Link2 className="h-3 w-3" />
+                  {ready && getProgress(task.contentId).status === 'in_progress'
+                    ? '继续学习'
+                    : '开始学习'}
                 </Link>
               </div>
             </li>

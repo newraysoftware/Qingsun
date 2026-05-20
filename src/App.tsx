@@ -1,10 +1,12 @@
+import { lazy, Suspense, type ReactNode } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Layout } from './components/Layout'
+import { PageLoader } from './components/PageLoader'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { AdminRoute } from './components/AdminRoute'
 import { Home } from './pages/Home'
 import { TrainingSystem } from './pages/TrainingSystem'
 import { MyPlan } from './pages/MyPlan'
-import { ContentHub } from './pages/ContentHub'
 import { VirtualPractice } from './pages/VirtualPractice'
 import { Cases } from './pages/Cases'
 import { Assessment } from './pages/Assessment'
@@ -14,9 +16,17 @@ import { Experts } from './pages/Experts'
 import { Tools } from './pages/Tools'
 import { News } from './pages/News'
 import { Profile } from './pages/Profile'
-import { Admin } from './pages/Admin'
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
+
+const ContentHub = lazy(() =>
+  import('./pages/ContentHub').then((m) => ({ default: m.ContentHub })),
+)
+const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })))
+
+function Lazy({ children }: { children: ReactNode }) {
+  return <Suspense fallback={<PageLoader />}>{children}</Suspense>
+}
 
 export default function App() {
   return (
@@ -26,7 +36,14 @@ export default function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="system" element={<TrainingSystem />} />
-        <Route path="content" element={<ContentHub />} />
+        <Route
+          path="content"
+          element={
+            <Lazy>
+              <ContentHub />
+            </Lazy>
+          }
+        />
         <Route path="virtual" element={<VirtualPractice />} />
         <Route path="cases" element={<Cases />} />
         <Route path="experts" element={<Experts />} />
@@ -72,7 +89,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="admin" element={<Admin />} />
+        <Route
+          path="admin"
+          element={
+            <AdminRoute>
+              <Lazy>
+                <Admin />
+              </Lazy>
+            </AdminRoute>
+          }
+        />
       </Route>
     </Routes>
   )

@@ -15,6 +15,7 @@ import { updateProfile } from '../api/auth'
 import { useAuth } from './AuthContext'
 
 const GUEST_STORAGE_KEY = 'qingsun-guest-profile'
+const PLAN_TASKS_KEY = 'qingsun-plan-tasks'
 
 interface Toast {
   id: number
@@ -32,6 +33,7 @@ interface AppContextValue {
   runAssessment: (stageId: TrainingStageId) => void
   updateStage: (stageId: TrainingStageId) => void
   generatePlanFromAssessment: (years: number, weakAreas: string[]) => void
+  syncContentCompleted: (contentId: string) => void
   showToast: (message: string) => void
 }
 
@@ -66,6 +68,27 @@ function buildDefaultTasks(stageId: TrainingStageId): PlanTask[] {
   })
 }
 
+function planStorageKey(userKey: string) {
+  return `${PLAN_TASKS_KEY}-${userKey}`
+}
+
+function loadPlanTasks(userKey: string, stageId: TrainingStageId): PlanTask[] {
+  try {
+    const raw = localStorage.getItem(planStorageKey(userKey))
+    if (raw) {
+      const parsed = JSON.parse(raw) as PlanTask[]
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed
+    }
+  } catch {
+    /* ignore */
+  }
+  return buildDefaultTasks(stageId)
+}
+
+function savePlanTasks(userKey: string, tasks: PlanTask[]) {
+  localStorage.setItem(planStorageKey(userKey), JSON.stringify(tasks))
+}
+
 function loadGuestProfile(): UserProfile {
   try {
     const raw = localStorage.getItem(GUEST_STORAGE_KEY)
@@ -80,8 +103,11 @@ const AppContext = createContext<AppContextValue | null>(null)
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const { user: authUser, isAuthenticated, setUser: setAuthUser } = useAuth()
+  const userKey = isAuthenticated && authUser ? `user-${authUser.id}` : 'guest'
   const [guestUser, setGuestUser] = useState<UserProfile>(loadGuestProfile)
-  const [tasks, setTasks] = useState<PlanTask[]>(() => buildDefaultTasks('foundation'))
+  const [tasks, setTasks] = useState<PlanTask[]>(() =>
+    loadPlanTasks('guest', loadGuestProfile().stageId),
+  )
   const [checkedInToday, setCheckedInToday] = useState(false)
   const [toast, setToast] = useState<Toast | null>(null)
 
@@ -89,10 +115,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const isGuest = !isAuthenticated
 
   useEffect(() => {
-    if (authUser) {
-      setTasks(buildDefaultTasks(authUser.stageId))
-    }
-  }, [authUser?.id, authUser?.stageId])
+    const stageId = authUser?.stageId ?? guestUser.stageId
+    setTasks(loadPlanTasks(userKey, stageId))
+  }, [userKey, authUser?.stageId, guestUser.stageId])
+
+  useEffect(() => {
+    savePlanTasks(userKey, tasks)
+  }, [userKey, tasks])
 
   useEffect(() => {
     if (isGuest) {
@@ -131,15 +160,44 @@ export function AppProvider({ children }: { children: ReactNode }) {
     [authUser, guestUser, isAuthenticated, persistUser],
   )
 
+  const recalcPlanFromTasks = useCallback((nextTasks: PlanTask[]) => {
+    const done = nextTasks.filter((t) => t.completed).length
+    const progress = nextTasks.length ? Math.round((done / nextTasks.length) * 100) : 0
+    applyUserUpdate((u) => ({
+      ...u,
+      planProgress: progress,
+    }))
+    return progress
+  }, [applyUserUpdate])
+
+  const syncContentCompleted = useCallback(
+    (contentId: string) => {
+      setTasks((prev) => {
+        const hasMatch = prev.some((t) => t.contentId === contentId && !t.completed)
+        if (!hasMatch) return prev
+        const next = prev.map((t) =>
+          t.contentId === contentId ? { ...t, completed: true } : t,
+        )
+        recalcPlanFromTasks(next)
+        applyUserUpdate((u) => ({
+          ...u,
+          contentMastery: Math.min(100, u.contentMastery + 8),
+          points: u.points + 15,
+        }))
+        showToast('学习内容已完成，规划任务已同步')
+        return next
+      })
+    },
+    [applyUserUpdate, recalcPlanFromTasks, showToast],
+  )
+
   const completeTask = useCallback(
     (taskId: string) => {
       setTasks((prev) => {
         const next = prev.map((t) => (t.id === taskId ? { ...t, completed: true } : t))
-        const done = next.filter((t) => t.completed).length
-        const progress = Math.round((done / next.length) * 100)
+        recalcPlanFromTasks(next)
         applyUserUpdate((u) => ({
           ...u,
-          planProgress: progress,
           contentMastery: Math.min(100, u.contentMastery + 8),
           points: u.points + 15,
         }))
@@ -147,7 +205,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       })
       showToast('任务已完成，+15积分')
     },
-    [applyUserUpdate, showToast],
+    [applyUserUpdate, recalcPlanFromTasks, showToast],
   )
 
   const checkIn = useCallback(() => {
@@ -220,6 +278,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       runAssessment,
       updateStage,
       generatePlanFromAssessment,
+      syncContentCompleted,
       showToast,
     }),
     [
@@ -233,6 +292,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       runAssessment,
       updateStage,
       generatePlanFromAssessment,
+      syncContentCompleted,
       showToast,
     ],
   )

@@ -34,7 +34,7 @@ export function Home() {
               <h1 className="text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
                 介入医生系统化自学平台
                 <span className="mt-2 block text-primary-100">
-                  从规培到独立主刀，按体系成长，按规划进阶
+                  从规培到独立手术，按体系成长，按规划进阶
                 </span>
               </h1>
               <p className="mt-4 max-w-xl text-primary-100/90 md:text-lg">
@@ -52,9 +52,9 @@ export function Home() {
 
             <div className="relative flex items-end justify-center lg:justify-end">
               <img
-                src="/images/hero-dsa-carm.png?v=2"
+                src="/images/hero-dsa-carm.png?v=3"
                 alt="国产 DSA C臂与影像系统"
-                className="w-full max-w-xl object-contain drop-shadow-2xl max-h-[240px] sm:max-h-[300px] lg:max-h-[380px]"
+                className="w-full max-w-xl object-contain drop-shadow-2xl mix-blend-screen max-h-[240px] sm:max-h-[300px] lg:max-h-[380px]"
               />
             </div>
           </div>

@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 *.local
 server/data
+server/uploads
 server/.env
 .env
 *.log

@@ -15,6 +15,7 @@ import type { LoginInput, RegisterInput } from '../api/auth'
 interface AuthContextValue {
   user: ApiUser | null
   isAuthenticated: boolean
+  isAdmin: boolean
   loading: boolean
   login: (input: LoginInput) => Promise<void>
   register: (input: RegisterInput) => Promise<void>
@@ -81,6 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       user,
       isAuthenticated: !!user,
+      isAdmin: user?.role === 'admin',
       loading,
       login,
       register,

@@ -11,15 +11,53 @@ export interface TrainingStage {
 }
 
 export type ContentType = 'theory' | 'dsa' | 'virtual' | 'case'
+export type MediaType = 'none' | 'pdf' | 'ppt' | 'video' | 'vr'
+export type VrFormat = 'glb' | 'gltf' | 'fbx'
+export type ContentStatus = 'draft' | 'published'
+export type LearningStatus = 'not_started' | 'in_progress' | 'completed'
+export type LearningPositionKind = 'video' | 'pdf' | 'ppt' | 'vr' | 'document'
+
+export interface LearningPosition {
+  kind: LearningPositionKind
+  value: number
+  meta?: string
+}
+
+export interface ContentLearningProgress {
+  contentId: string
+  status: LearningStatus
+  progressPercent: number
+  lastPosition: LearningPosition | null
+  startedAt: string | null
+  completedAt: string | null
+  updatedAt: string
+}
 
 export interface TrainingContent {
   id: string
   stageId: TrainingStageId
+  /** @deprecated 使用 category，与 type 同义 */
   type: ContentType
+  category: ContentType
   title: string
   description: string
   duration: string
   tags: string[]
+  mediaType: MediaType
+  previewImageUrl: string | null
+  contentFileUrl: string | null
+  contentFileName: string | null
+  contentFileSize: number | null
+  vrFormat: VrFormat | null
+  status: ContentStatus
+  sortOrder: number
+  createdAt?: string
+  updatedAt?: string
+}
+
+/** 将 API 记录映射为统一结构（兼容旧字段 type） */
+export function normalizeContent(c: TrainingContent): TrainingContent {
+  return { ...c, type: c.category ?? c.type }
 }
 
 export interface PlanTask {
@@ -86,10 +124,13 @@ export interface UserProfile {
   assessmentDone: boolean
 }
 
+export type UserRole = 'admin' | 'user'
+
 /** 后端返回的用户（含账号信息） */
 export interface ApiUser extends UserProfile {
   id: number
   email: string
+  role: UserRole
 }
 
 export function apiUserToProfile(user: ApiUser): UserProfile {

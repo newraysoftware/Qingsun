@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import bcrypt from 'bcryptjs'
-import { getUserByEmail, getUserById, db, type DbUser } from '../db.js'
+import { getUserByEmail, getUserById, db } from '../db.js'
+import { ADMIN_EMAIL } from '../seed/admin.js'
 import { loginSchema, registerSchema } from '../schemas/auth.js'
 import { signToken } from '../utils/jwt.js'
 import { mapUser } from '../utils/userMapper.js'
@@ -23,6 +24,10 @@ authRouter.post('/register', (req, res) => {
   }
 
   const { email, password, name, yearsOfPractice } = parsed.data
+  if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+    res.status(400).json({ error: '该邮箱为系统保留账号，无法注册' })
+    return
+  }
   if (getUserByEmail(email)) {
     res.status(409).json({ error: '该邮箱已注册' })
     return
@@ -33,8 +38,8 @@ authRouter.post('/register', (req, res) => {
 
   const result = db
     .prepare(
-      `INSERT INTO users (email, password_hash, name, stage_id, years_of_practice)
-       VALUES (?, ?, ?, ?, ?)`,
+      `INSERT INTO users (email, password_hash, name, stage_id, years_of_practice, role)
+       VALUES (?, ?, ?, ?, ?, 'user')`,
     )
     .run(email, passwordHash, name, stageId, yearsOfPractice)
 

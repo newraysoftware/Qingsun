@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 export function Footer() {
+  const { isAdmin } = useAuth()
   return (
     <footer className="border-t border-slate-200 bg-white">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -9,7 +11,7 @@ export function Footer() {
             <h3 className="font-semibold text-slate-900">青笋 · 介入培训平台</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-500">
               专注介入医生系统化自学培训，以四级培训体系为框架、个性化规划为路径、精准内容为支撑，
-              助力从规培到独立主刀的全周期成长。
+              助力从规培到独立手术的全周期成长。
             </p>
           </div>
           <div>
@@ -27,7 +29,9 @@ export function Footer() {
               <li><Link to="/experts" className="hover:text-primary-600">专家资源</Link></li>
               <li><Link to="/tools" className="hover:text-primary-600">实用工具</Link></li>
               <li><Link to="/news" className="hover:text-primary-600">行业资讯</Link></li>
-              <li><Link to="/admin" className="hover:text-primary-600">管理后台</Link></li>
+              {isAdmin && (
+                <li><Link to="/admin" className="hover:text-primary-600">管理后台</Link></li>
+              )}
             </ul>
           </div>
         </div>

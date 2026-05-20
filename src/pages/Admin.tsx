@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TRAINING_CONTENTS } from '../data/content'
+import { ContentManager } from '../components/admin/ContentManager'
 import { STAGE_LABEL } from '../data/trainingSystem'
 
 type Tab = 'content' | 'users' | 'system' | 'stats' | 'incentives'
@@ -33,32 +33,7 @@ export function Admin() {
       </nav>
 
       <div className="mt-6">
-        {tab === 'content' && (
-          <div>
-            <p className="mb-4 text-sm text-slate-600">审核与更新培训内容、国产DSA教程、典型案例、资讯</p>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left text-slate-500">
-                  <th className="py-2">标题</th>
-                  <th>阶段</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                {TRAINING_CONTENTS.slice(0, 8).map((c) => (
-                  <tr key={c.id} className="border-b border-slate-50">
-                    <td className="py-2">{c.title}</td>
-                    <td>{STAGE_LABEL[c.stageId]}</td>
-                    <td>
-                      <button type="button" className="text-primary-600 hover:underline">编辑</button>
-                      <button type="button" className="ml-2 text-green-600 hover:underline">通过</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        {tab === 'content' && <ContentManager />}
         {tab === 'users' && (
           <div className="card">
             <p className="text-sm">自学者 1,280 · 专家 24 · 可查看学习进度与考核情况</p>

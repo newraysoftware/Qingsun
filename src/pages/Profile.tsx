@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { useAuth } from '../context/AuthContext'
 import { STAGE_LABEL, TRAINING_STAGES } from '../data/trainingSystem'
+import { LearningRecordsSection } from '../components/profile/LearningRecordsSection'
 
 export function Profile() {
   const { user, updateStage } = useApp()
@@ -56,6 +57,8 @@ export function Profile() {
           ))}
         </div>
       </div>
+
+      <LearningRecordsSection />
 
       <div className="mt-6 flex flex-wrap gap-3">
         <Link to="/plan" className="btn-primary">
