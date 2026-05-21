@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
 import { Toast } from './Toast'
+import { LearningAssistant } from './assistant/LearningAssistant'
 import { useApp } from '../context/AppContext'
 
 export function Layout() {
@@ -26,6 +27,7 @@ export function Layout() {
       </main>
       <Footer />
       <Toast />
+      <LearningAssistant />
     </div>
   )
 }

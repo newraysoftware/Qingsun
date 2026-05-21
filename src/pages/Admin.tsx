@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { ContentManager } from '../components/admin/ContentManager'
+import { AssistantConfigManager } from '../components/admin/AssistantConfigManager'
 import { STAGE_LABEL } from '../data/trainingSystem'
 
-type Tab = 'content' | 'users' | 'system' | 'stats' | 'incentives'
+type Tab = 'content' | 'assistant' | 'users' | 'system' | 'stats' | 'incentives'
 
 export function Admin() {
   const [tab, setTab] = useState<Tab>('content')
   const tabs: { id: Tab; label: string }[] = [
     { id: 'content', label: '内容管理' },
+    { id: 'assistant', label: '智能学习助手' },
     { id: 'users', label: '用户管理' },
     { id: 'system', label: '培训体系' },
     { id: 'stats', label: '数据统计' },
@@ -34,6 +36,7 @@ export function Admin() {
 
       <div className="mt-6">
         {tab === 'content' && <ContentManager />}
+        {tab === 'assistant' && <AssistantConfigManager />}
         {tab === 'users' && (
           <div className="card">
             <p className="text-sm">自学者 1,280 · 专家 24 · 可查看学习进度与考核情况</p>

@@ -7,6 +7,9 @@ import { authRouter } from './routes/auth.js'
 import { usersRouter } from './routes/users.js'
 import { learningProgressRouter } from './routes/learningProgress.js'
 import { trainingContentsRouter } from './routes/trainingContents.js'
+import { assistantRouter } from './routes/assistant.js'
+import { adminAssistantRouter } from './routes/adminAssistant.js'
+import { ensureAssistantTables } from './repositories/assistantRepository.js'
 import { UPLOAD_ROOT } from './middleware/upload.js'
 import './db.js'
 import { SEED_CONTENTS } from './seed/contents.js'
@@ -15,6 +18,7 @@ import { seedContentsIfEmpty } from './repositories/contentRepository.js'
 
 seedAdminUser()
 seedContentsIfEmpty(SEED_CONTENTS)
+ensureAssistantTables()
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -32,6 +36,8 @@ app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/users/me/learning-progress', learningProgressRouter)
 app.use('/api/training-contents', trainingContentsRouter)
+app.use('/api/assistant', assistantRouter)
+app.use('/api/admin/assistant', adminAssistantRouter)
 
 app.use((_req, res) => {
   res.status(404).json({ error: '接口不存在' })
